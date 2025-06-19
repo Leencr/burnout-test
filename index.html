@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test de Burnout - por Eileen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #e8f0ff, #f4f8fb);
+      margin: 0;
+      padding: 0;
+      color: #2c3e50;
+    }
+    header {
+      background-color: #6d83f2;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      border-bottom: 5px solid #4e69c0;
+    }
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+    }
+    h1, h2 {
+      margin-top: 0;
+    }
+    .question {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    label {
+      display: block;
+      margin-top: 0.4rem;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-radius: 10px;
+      background: #e8ecf4;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      background: #6d83f2;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-top: 2rem;
+      display: block;
+    }
+    button:hover {
+      background: #4e69c0;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Test de Burnout</h1>
+    <p>Creado por Eileen</p>
+  </header>
+  <main>
+    <p>Responde las siguientes afirmaciones según cómo te has sentido en el último mes.</p>
+    <form id="burnoutForm">
+      <div id="questions"></div>
+      <button type="submit">Ver Resultado</button>
+    </form>
+    <div class="result" id="result" style="display:none;"></div>
+  </main>
+  <footer>
+    &copy; 2025 Test de Burnout | Desarrollado por Eileen
+  </footer>
+  <script>
+    const questions = [
+      "Me siento emocionalmente agotado/a por mi trabajo.",
+      "Me siento cansado/a al comenzar mi jornada laboral.",
+      "Siento que ya no puedo más con mis responsabilidades laborales.",
+      "Me resulta difícil relajarme incluso fuera del trabajo.",
+      "Siento que estoy al límite de mis fuerzas.",
+      "Me siento insensible o indiferente hacia mis compañeros o clientes.",
+      "Trato a las personas como si fueran objetos o problemas que resolver.",
+      "Evito el contacto o las interacciones sociales en el trabajo.",
+      "Me siento irritado o molesto con frecuencia por cuestiones laborales.",
+      "Pienso que lo que hago en el trabajo ya no tiene sentido.",
+      "Siento que lo que hago en el trabajo es valioso.",
+      "Me siento satisfecho/a con mis logros laborales.",
+      "Siento que marco una diferencia positiva con mi trabajo.",
+      "Me siento motivado/a para seguir creciendo profesionalmente.",
+      "Me siento competente en lo que hago."
+    ];
+    const container = document.getElementById('questions');
+    questions.forEach((text, index) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.innerHTML = `<strong>${index + 1}.</strong> ${text}<br />`;
+      for (let i = 0; i <= 4; i++) {
+        div.innerHTML += `
+          <label>
+            <input type="radio" name="q${index}" value="${i}" required />
+            ${i} - ${['Nunca', 'Casi nunca', 'A veces', 'Frecuentemente', 'Siempre'][i]}
+          </label>`;
+      }
+      container.appendChild(div);
+    });
+    document.getElementById('burnoutForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      let total = 0;
+      const formData = new FormData(this);
+      for (let i = 0; i < questions.length; i++) {
+        let val = parseInt(formData.get(`q${i}`));
+        if (i >= 10) val = 4 - val;
+        total += val;
+      }
+      let resultText = `<strong>Puntaje total: ${total}</strong><br><br>`;
+      if (total <= 15) {
+        resultText += "<strong>Nivel muy bajo:</strong> Estás manejando bien el estrés laboral. Sigue cuidando tu bienestar.";
+      } else if (total <= 30) {
+        resultText += "<strong>Nivel moderado:</strong> Hay signos de estrés. Evalúa tus hábitos y considera pausas o ajustes.";
+      } else if (total <= 45) {
+        resultText += "<strong>Nivel alto:</strong> Signos claros de agotamiento. Habla con un superior o busca ayuda psicológica.";
+      } else {
+        resultText += "<strong>Nivel crítico:</strong> Riesgo severo de burnout. Busca apoyo profesional urgente.";
+      }
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = resultText;
+      resultDiv.style.display = 'block';
+      resultDiv.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
