@@ -10,83 +10,169 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom right, #e8f0ff, #f4f8fb);
+      background: linear-gradient(to bottom right, #111827, #1f2937);
       margin: 0;
       padding: 0;
-      color: #2c3e50;
+      color: #fbbf24;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 120px; /* espacio para firma y botones */
+      overflow-x: hidden;
     }
+
+    /* Estrellas */
+    .star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fbbf24, transparent);
+      animation: twinkle 3s infinite alternate;
+      opacity: 0.8;
+    }
+    .star.silver {
+      background: radial-gradient(circle, #f9fafb, transparent);
+    }
+
+    @keyframes twinkle {
+      from { transform: scale(1); opacity: 0.7; }
+      to { transform: scale(1.5); opacity: 1; }
+    }
+
     header {
-      background-color: #6d83f2;
-      color: white;
+      background-color: #fbbf24;
+      color: #111827;
       padding: 2rem;
       text-align: center;
-      border-bottom: 5px solid #4e69c0;
+      border-bottom: 5px solid #d97706;
+      position: relative;
+      z-index: 10;
     }
+
     main {
       max-width: 800px;
       margin: auto;
       padding: 2rem;
+      position: relative;
+      z-index: 10;
+      color: #f9fafb;
     }
+
     h1, h2 {
       margin-top: 0;
+      text-shadow: 0 0 5px #fbbf24;
     }
+
     .question {
-      background: white;
+      background: rgba(255, 255, 255, 0.1);
       padding: 1rem;
       margin-bottom: 1rem;
       border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
+
     label {
       display: block;
       margin-top: 0.4rem;
+      color: #fbbf24;
     }
+
     .result {
       margin-top: 2rem;
       padding: 1.5rem;
       border-radius: 10px;
-      background: #e8ecf4;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      color: #f9fafb;
     }
-    button {
-      background: #6d83f2;
-      color: white;
-      border: none;
-      padding: 0.8rem 1.8rem;
-      font-size: 1rem;
-      cursor: pointer;
+
+    /* Botones flotantes */
+    .button-floating {
+      position: fixed;
+      bottom: 20px;
+      padding: 10px 20px;
       border-radius: 8px;
-      margin-top: 2rem;
-      display: block;
+      border: none;
+      color: #111827;
+      background: linear-gradient(45deg, #fbbf24, #f59e0b);
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+      transition: transform 0.3s, box-shadow 0.3s;
+      z-index: 1000;
     }
-    button:hover {
-      background: #4e69c0;
+    .button-floating:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 1);
     }
-    footer {
+    .button-left {
+      left: 20px;
+    }
+    .button-right {
+      right: 20px;
+    }
+
+    /* Firma simplificada */
+    .signature {
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
-      padding: 2rem;
+      z-index: 1000;
+    }
+    .signature .main {
       font-size: 0.9rem;
-      color: #888;
+      color: #fbbf24;
+    }
+    .signature .sub {
+      font-size: 0.7rem;
+      color: rgba(249, 250, 251, 0.8);
     }
   </style>
 </head>
 <body>
+  <!-- Estrellas -->
+  <div id="stars"></div>
+
   <header>
     <h1>Test de Burnout</h1>
     <p>Creado por Eileen</p>
   </header>
+
   <main>
     <p>Responde las siguientes afirmaciones según cómo te has sentido en el último mes.</p>
     <form id="burnoutForm">
       <div id="questions"></div>
-      <button type="submit">Ver Resultado</button>
     </form>
     <div class="result" id="result" style="display:none;"></div>
   </main>
-  <footer>
-    &copy; 2025 Test de Burnout | Desarrollado por Eileen
-  </footer>
+
+  <!-- Firma -->
+  <div class="signature">
+    <div class="main">✨ Creado con magia por ECB 📚</div>
+    <div class="sub">© 2025 Book Dragon Club</div>
+  </div>
+
+  <!-- Botones flotantes -->
+  <a href="https://leencr.github.io/">
+    <button class="button-floating button-left">⬅️ Volver</button>
+  </a>
+  <button type="submit" form="burnoutForm" class="button-floating button-right">Ver Resultado</button>
+
   <script>
+    // Generar estrellas
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      if (Math.random() > 0.5) star.classList.add('silver');
+      star.style.top = `${Math.random() * 100}vh`;
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.animationDuration = `${2 + Math.random() * 3}s`;
+      starsContainer.appendChild(star);
+    }
+
     const questions = [
       "Me siento emocionalmente agotado/a por mi trabajo.",
       "Me siento cansado/a al comenzar mi jornada laboral.",
@@ -104,6 +190,7 @@
       "Me siento motivado/a para seguir creciendo profesionalmente.",
       "Me siento competente en lo que hago."
     ];
+
     const container = document.getElementById('questions');
     questions.forEach((text, index) => {
       const div = document.createElement('div');
@@ -118,6 +205,7 @@
       }
       container.appendChild(div);
     });
+
     document.getElementById('burnoutForm').addEventListener('submit', function (e) {
       e.preventDefault();
       let total = 0;
@@ -143,8 +231,5 @@
       resultDiv.scrollIntoView({ behavior: 'smooth' });
     });
   </script>
-  <a href="https://leencr.github.io/" class="fixed bottom-4 left-4 bg-indigo-600 text-white px-4 py-2 rounded shadow-lg hover:bg-indigo-700 z-50">
-  ⬅️ Volver a la pagina de inicio
-</a>
 </body>
 </html>
